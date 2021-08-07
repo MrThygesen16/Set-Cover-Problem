@@ -96,23 +96,35 @@ public class Client {
         // TEMP STUFF
         System.out.println();
 
-        int currentGroup = 1;
 
-        for(ArrayList<Integer> innerList : groupDataLists) {
-            
-            System.out.print("Group: " + currentGroup + " [ ");
-
-            for(Integer number : innerList) {
-                System.out.print(number + " ");
-            }
-
-            System.out.print("]");
-            System.out.println();
-
-            currentGroup = currentGroup + 1;
+        for (int i = 0; i < groupDataLists.size(); i++){
+            System.out.println(groupDataLists.get(i) );
         }
 
         System.out.println();
+
+
+        for (int i = 0; i < groupDataLists.size(); i++){
+            System.out.println(groupDataLists.get(i).get(0) );
+        }
+
+
+
+        // for(ArrayList<Integer> innerList : groupDataLists) {
+            
+        //     System.out.print("Group: " + currentGroup + " [ ");
+
+        //     for(Integer number : innerList) {
+        //         System.out.print(number + " ");
+        //     }
+
+        //     System.out.print("]");
+        //     System.out.println();
+
+        //     currentGroup = currentGroup + 1;
+        // }
+
+        // System.out.println();
 
     }
 
