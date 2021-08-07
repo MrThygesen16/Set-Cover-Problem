@@ -92,14 +92,15 @@ public class Client {
         int numGroups = inputNumberOfGroups();
         ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups);
 
+
+        // TEMP STUFF
         System.out.println();
 
+        int currentGroup = 1;
+
         for(ArrayList<Integer> innerList : groupDataLists) {
-
-            int curr = groupDataLists.indexOf(innerList);
-            curr = curr + 1;
-
-            System.out.print("Group: " + curr + " [ ");
+            
+            System.out.print("Group: " + currentGroup + " [ ");
 
             for(Integer number : innerList) {
                 System.out.print(number + " ");
@@ -107,6 +108,8 @@ public class Client {
 
             System.out.print("]");
             System.out.println();
+
+            currentGroup = currentGroup + 1;
         }
 
         System.out.println();
