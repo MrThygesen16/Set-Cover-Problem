@@ -49,6 +49,13 @@ public class Client {
     // given the number of groups by the user
     // we return an ArrayList of ArrayLists that contain Integers
     // we populate this list of lists by calling groupLineToList <-- returns an arrayList of integers
+    /* 
+        ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups);
+        
+        function might not be used, but here is how to call it.
+    
+    */
+
     ArrayList<ArrayList<Integer>> strArrToArrList(int numGroups){
 
         ArrayList<ArrayList<Integer>> returnList = new ArrayList<ArrayList<Integer>>();
@@ -62,6 +69,7 @@ public class Client {
 
         return returnList;
     }
+
 
     // given a string input this splits up the string into an array of strings
     // casts all elements of the string array to integers and adds it to an arrayList of integers
@@ -78,6 +86,73 @@ public class Client {
         return returnList;
     }
 
+
+    // input to a standard array instead...
+    public int[] groupToArray(String group){
+
+        String[] splitStr = group.split("\\s+");
+        int groupSize = splitStr.length-1;
+
+        int[] groupArr = new int[groupSize];
+
+        for (int i = 0; i < groupSize; i ++){ // we do -1 to ommit the 0 at the end
+            groupArr[i] = Integer.parseInt(splitStr[i]);
+        }
+
+        return groupArr;
+    }
+
+    // construct an array of arrays        
+    // if not used: here is how to call this method...  int[][] groupList = groupArrays(numGroups);
+    public int[][] groupArrays(int numGroups){
+        int[][] groupOfGroups = new int[numGroups][];
+
+        console.printf("Enter the list of members of each group (one group per line, each terminated by 0):\n");
+
+        for (int i = 0; i < numGroups; i++){
+            String tempStr = userInput("");
+            groupOfGroups[i] = groupToArray(tempStr);
+        }
+
+        return groupOfGroups;
+    }
+
+
+    
+    public ArrayList<Person> personList(ArrayList<ArrayList<Integer>> arrArrList, int numGrps){
+
+        ArrayList<Integer> retList = new ArrayList<Integer>();
+        ArrayList<Person> pList = new ArrayList<Person>();
+
+        int group = 1;
+
+        for (ArrayList<Integer> list : arrArrList){
+           
+            for (Integer num : list){
+                
+                if (!retList.contains(num)){
+                    retList.add(num);
+
+                    Person p = new Person(num, numGrps);
+                    p.addToList(group);
+                    pList.add(p);
+
+                } else {
+                    for (int i = 0; i < pList.size(); i++){
+                        if (pList.get(i).getPersonID() == num){
+                            pList.get(i).addToList(group);
+                        }
+                    }
+                }
+            }
+
+            group = group + 1;
+        }
+
+        return pList;
+    }
+
+
     // method that prompts user to give input -- converts it to an Int and returns int value
     public int inputNumberOfGroups(){
         String strGroupNum = userInput("Enter the number of groups from which you must find representatives: ");
@@ -90,41 +165,21 @@ public class Client {
     public void start(){
         
         int numGroups = inputNumberOfGroups();
+
         ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups);
 
-
-        // TEMP STUFF
-        System.out.println();
-
-
-        for (int i = 0; i < groupDataLists.size(); i++){
-            System.out.println(groupDataLists.get(i) );
-        }
+        ArrayList<Person> personList = personList(groupDataLists, numGroups);
 
         System.out.println();
 
+        for (int i = 0; i < personList.size(); i++){
+            personList.get(i).personToString();
+        } 
+        
 
-        for (int i = 0; i < groupDataLists.size(); i++){
-            System.out.println(groupDataLists.get(i).get(0) );
-        }
 
-
-
-        // for(ArrayList<Integer> innerList : groupDataLists) {
-            
-        //     System.out.print("Group: " + currentGroup + " [ ");
-
-        //     for(Integer number : innerList) {
-        //         System.out.print(number + " ");
-        //     }
-
-        //     System.out.print("]");
-        //     System.out.println();
-
-        //     currentGroup = currentGroup + 1;
-        // }
-
-        // System.out.println();
+     
+        
 
     }
 
