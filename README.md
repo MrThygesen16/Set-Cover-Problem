@@ -48,4 +48,6 @@ Person: n Groups: [group 5] ][group 4] [group 3] [group 2] [group 1]
         9             1          0         1         0         1         
 ```
 
+This equivalent to saying: Person 9 groups = `{1, 3, 5}`.
+
 Using person `9` as an example we can see that a `1` represents group memebership, and a `0` represents not being part of that group. 
