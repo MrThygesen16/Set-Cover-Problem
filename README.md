@@ -1,18 +1,21 @@
-## Getting Started
+# Set Cover Problem
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+For `g` groups of `n` people, we want to find the least number of people in the shortest time possible so that all groups are represented.
 
-## Folder Structure
+For example given the following 5 groups of people:
+```
+G1: 1 2 3 4 5 6 7 8 9 0
+G2: 2 4 6 8 0
+G3: 1 3 5 7 9 0
+G4: 2 3 5 7 0
+G5: 4 6 8 9 0
+```
+G# represents the group number, and each person is represented by an ID (integer >= 1), e.g. `9` etc.
 
-The workspace contains two folders by default, where:
+From this example we wish to find a combination of people so that all 5 groups are represented/accounted for.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+One possible solution to the above example are persons `2` and `9`.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+Person 2 groups = {1, 2, 4}, and person 9 groups = {1, 3, 5}.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+If we combine these together we get {1,1,2,3,4,5}, all groups are represented...
