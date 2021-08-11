@@ -44,10 +44,10 @@ We are using a binary array to represent group membership.
 Another way to view this is:
 
 ```
-Person: n Groups: [group 5] ][group 4] [group 3] [group 2] [group 1] 
-        9             1          0         1         0         1         
+Person: n Groups: [group 5] [group 4] [group 3] [group 2] [group 1] 
+Person: 9 Groups      1         0         1         0         1         
 ```
 
 This equivalent to saying: Person 9 groups = `{1, 3, 5}`.
 
-Using person `9` as an example we can see that a `1` represents group memebership, and a `0` represents not being part of that group. 
+Using person `9` as an example we can see that a `1` represents group memebership, and a `0` represents not being part of that group. We are representing it like this so that when we come to finding the possible combinations, it's simply a matter of using logical operations (aka union) of groups so that we end with an array that is all 1's using the least number of people possible.
