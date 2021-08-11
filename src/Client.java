@@ -118,38 +118,39 @@ public class Client {
     }
 
 
-    
+    // given an arrayList of arraylists of integers (groups and their people)
+    // this returns a list of people and their groups (an arrayList of People objects)
     public ArrayList<Person> personList(ArrayList<ArrayList<Integer>> arrArrList, int numGrps){
 
-        ArrayList<Integer> retList = new ArrayList<Integer>();
-        ArrayList<Person> pList = new ArrayList<Person>();
+        ArrayList<Integer> containList = new ArrayList<Integer>(); // list for keeping track of what people have been seen
+        ArrayList<Person> pList = new ArrayList<Person>(); // the list we will return at the end of this method
 
-        int group = 1;
+        int group = 1; // we parse this in when we create a new person object
 
-        for (ArrayList<Integer> list : arrArrList){
+        for (ArrayList<Integer> list : arrArrList){ // iterating through each group
            
-            for (Integer num : list){
+            for (Integer num : list){ // iterating through each person in a group
                 
-                if (!retList.contains(num)){
-                    retList.add(num);
+                if (!containList.contains(num)){ // check if person's ID exists in containList (integer arrayList)
+                    containList.add(num); // if they don't exist we add them to this arrayList and create a new person object and add it to the pList
 
                     Person p = new Person(num, numGrps);
                     p.addToList(group);
                     pList.add(p);
 
-                } else {
+                } else { // if we come across a person that already exists we log which group we saw them in
                     for (int i = 0; i < pList.size(); i++){
-                        if (pList.get(i).getPersonID() == num){
+                        if (pList.get(i).getPersonID() == num){ 
                             pList.get(i).addToList(group);
                         }
                     }
                 }
             }
 
-            group = group + 1;
+            group = group + 1; // each time iterate group # since we are moving on to the next group when we reach this point
         }
 
-        return pList;
+        return pList; 
     }
 
 
@@ -164,23 +165,19 @@ public class Client {
     // this is where we will call most of our functions
     public void start(){
         
-        int numGroups = inputNumberOfGroups();
+        int numGroups = inputNumberOfGroups(); // user input for getting num groups
 
-        ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups);
+        ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups); // takes string input and converts to an arrayList of arrayLists of integers
 
-        ArrayList<Person> personList = personList(groupDataLists, numGroups);
+        ArrayList<Person> personList = personList(groupDataLists, numGroups); // arrayList of people objects that contains what groups they are in etc.
 
         System.out.println();
 
         for (int i = 0; i < personList.size(); i++){
             personList.get(i).personToString();
         } 
+
         
-
-
-     
-        
-
     }
 
 
