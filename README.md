@@ -24,7 +24,7 @@ However this is a relatively small example that we can figure out just by lookin
 
 ### Key Consideration
 
-Rather than looking at the persons in a group, it would be useful to look at the groups a person is in. 
+Rather than looking at the persons in a particular group, it would be more useful to look at the groups a person is in. 
 
 My solution uses an array to represent group membership for each person. Using the example above, if we were to map the groups to each person we would get something like this:
 
