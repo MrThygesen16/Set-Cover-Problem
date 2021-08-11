@@ -12,6 +12,13 @@ public class Client {
     }
 
     
+    public static void main(String[] args) throws Exception {
+
+        Client client = new Client(); // create new client object
+        client.start(); // puts us into starting point for program
+
+    }
+
     // allows users to send messages to the console
     // str is instructions for the user (e.g. "Enter the number of groups: [user input]")
     //      note: str can be empty
@@ -22,39 +29,83 @@ public class Client {
         return msg;
 
     }
- 
-    public static void main(String[] args) throws Exception {
-
-        Client client = new Client(); // create new client object
-        client.start(); // puts us into starting point for program
-
-    }
 
     // process input for number of groups
     public int strToInt(String str){ 
         
         int num = -1; // if try fails we return -1 to indicate failure
-
+    
         try {
             num = Integer.parseInt(str);
         } catch (NumberFormatException e){
             e.printStackTrace();
         }
-
+    
         return num;
     }
 
 
+    // method that prompts user to give input -- converts it to an Int and returns int value
+    public int inputNumberOfGroups(){
+        String strGroupNum = userInput("Enter the number of groups from which you must find representatives: ");
+        int numGroups = strToInt(strGroupNum);
+
+        return numGroups;
+    }
+
+
+    // this is where we will call most of our functions
+    public void start(){
+        
+        int numGroups = inputNumberOfGroups(); // user input for getting num groups
+
+        int[][] groupList = groupArrays(numGroups);
+
+        System.out.println();
+
+
+        for (int i =0; i < groupList.length; i++){
+
+            int group = i + 1;
+
+            System.out.print("Group " + group + ": ");
+            for (int j = 0; j < groupList[i].length; j++){
+                System.out.print(groupList[i][j] + " ");
+            }
+            System.out.println();
+        }
+        
+        // ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups); // takes string input and converts to an arrayList of arrayLists of integers
+
+        // ArrayList<Person> personList = personList(groupDataLists, numGroups); // arrayList of people objects that contains what groups they are in etc.
+
+        // System.out.println();
+
+        // for (int i = 0; i < personList.size(); i++){
+        //     personList.get(i).personToString();
+        // } 
+
+        
+    }
+
+     
+
+
+    /* 
+
+
+     ----------------------BEGIN ARRAYLIST METHODS----------------------
+
+        
     
+    */
+
+
     // given the number of groups by the user
     // we return an ArrayList of ArrayLists that contain Integers
     // we populate this list of lists by calling groupLineToList <-- returns an arrayList of integers
-    /* 
-        ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups);
-        
-        function might not be used, but here is how to call it.
-    
-    */
+    //
+    //                 function might not be used, but here is how to call it: ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups);
 
     ArrayList<ArrayList<Integer>> strArrToArrList(int numGroups){
 
@@ -84,37 +135,6 @@ public class Client {
         }
 
         return returnList;
-    }
-
-
-    // input to a standard array instead...
-    public int[] groupToArray(String group){
-
-        String[] splitStr = group.split("\\s+");
-        int groupSize = splitStr.length-1;
-
-        int[] groupArr = new int[groupSize];
-
-        for (int i = 0; i < groupSize; i ++){ // we do -1 to ommit the 0 at the end
-            groupArr[i] = Integer.parseInt(splitStr[i]);
-        }
-
-        return groupArr;
-    }
-
-    // construct an array of arrays        
-    // if not used: here is how to call this method...  int[][] groupList = groupArrays(numGroups);
-    public int[][] groupArrays(int numGroups){
-        int[][] groupOfGroups = new int[numGroups][];
-
-        console.printf("Enter the list of members of each group (one group per line, each terminated by 0):\n");
-
-        for (int i = 0; i < numGroups; i++){
-            String tempStr = userInput("");
-            groupOfGroups[i] = groupToArray(tempStr);
-        }
-
-        return groupOfGroups;
     }
 
 
@@ -154,31 +174,68 @@ public class Client {
     }
 
 
-    // method that prompts user to give input -- converts it to an Int and returns int value
-    public int inputNumberOfGroups(){
-        String strGroupNum = userInput("Enter the number of groups from which you must find representatives: ");
-        int numGroups = strToInt(strGroupNum);
+    /* 
+    
+        ----------------------END ARRAYLIST METHODS----------------------
+    
+       
+    */
 
-        return numGroups;
+
+
+
+
+
+    // divide up functions by standard arrays operations and arraylist operations for ease of reading...
+    // quite confusing otherwise 
+    // these methods do the same exact same things but return different data-structures etc.
+    // hence are grouped seperately 
+
+
+
+
+    /* 
+    
+     =======================BEGIN STANDARD ARRAY METHODS=======================
+    
+    */
+
+    // input to a standard array instead...
+    public int[] groupToArray(String group){
+
+        String[] splitStr = group.split("\\s+");
+        int groupSize = splitStr.length-1;
+
+        int[] groupArr = new int[groupSize];
+
+        for (int i = 0; i < groupSize; i ++){ // we do -1 to ommit the 0 at the end
+            groupArr[i] = Integer.parseInt(splitStr[i]);
+        }
+
+        return groupArr;
     }
 
-    // this is where we will call most of our functions
-    public void start(){
-        
-        int numGroups = inputNumberOfGroups(); // user input for getting num groups
+    // construct an array of arrays        
+    // if not used: here is how to call this method...  int[][] groupList = groupArrays(numGroups);
+    public int[][] groupArrays(int numGroups){
+        int[][] groupOfGroups = new int[numGroups][];
 
-        ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups); // takes string input and converts to an arrayList of arrayLists of integers
+        console.printf("Enter the list of members of each group (one group per line, each terminated by 0):\n");
 
-        ArrayList<Person> personList = personList(groupDataLists, numGroups); // arrayList of people objects that contains what groups they are in etc.
+        for (int i = 0; i < numGroups; i++){
+            String tempStr = userInput("");
+            groupOfGroups[i] = groupToArray(tempStr);
+        }
 
-        System.out.println();
-
-        for (int i = 0; i < personList.size(); i++){
-            personList.get(i).personToString();
-        } 
-
-        
+        return groupOfGroups;
     }
+
+    /* 
+    
+        =======================END STANDARD ARRAY METHODS=======================
+    
+    */
+    
 
 
 }
