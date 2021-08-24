@@ -1,13 +1,17 @@
 
+
+
 public class Person {
     
-    int personID; // persons ID
+    // private so we don't accidently change the values...
+    private int personID; // persons ID
     
-    int totalGroups; // number of groups in total for problem
+    private int totalGroups; // number of groups in total for problem
     
-    int[] groups; // array of ints to hold group membership
+    private int[] groups; // array of ints to hold group membership
 
-    int activeGroups; // how many groups a particular person is in
+    private int activeGroups; // how many groups a particular person is in
+
 
     // constructor with person ID and number og groups they are in
     // creates array of ints to hold group
@@ -22,8 +26,13 @@ public class Person {
     // we do totalGroups - groupID as it gives us exactly the form we want for the binary representation
     // e.g. group ID = 5, and totalGroups = 6 --> person would need to go to index of 1... which is 6 - 5.
     public void addToList(int groupID){
-       groups[this.totalGroups-groupID] = groupID/groupID; 
-       this.activeGroups = this.activeGroups + 1;
+
+        int idx = this.totalGroups-groupID; // index for given group ID
+        int binRep = groupID/groupID; // to get current 1, 0 etc.
+
+        groups[idx] = binRep; 
+        this.activeGroups = this.activeGroups + 1;
+
     }
 
     // Below are getters and setters for various attributes for a person object
@@ -47,14 +56,20 @@ public class Person {
        return this.activeGroups;
     }
 
+
+
     // debug method for verifying correct mapping of groups to a person
     public void personToString(){
 
-        System.out.print("Person: " + this.personID + " Groups: ");
+        System.out.print("Person: " + this.personID + " | # Active: " + this.getActiveGroups() + " | Groups: " );
         for (int i = 0; i < this.totalGroups; i++){
             System.out.print(this.groups[i] + " ");
+            
         }
+
         System.out.println();
     }
 
+
+   // + " | as binary: " + this.getGroupBin()
 }

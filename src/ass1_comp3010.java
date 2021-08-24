@@ -1,20 +1,20 @@
 import java.io.Console;
 import java.util.ArrayList;
 
-public class Client {
+public class ass1_comp3010 {
     
     // initialise console object
     // for reading user input
     Console console;
 
-    public Client(){
+    public ass1_comp3010(){
         console = System.console(); // make a Console object named console when class Client is created
     }
 
     
     public static void main(String[] args) throws Exception {
 
-        Client client = new Client(); // create new client object
+        ass1_comp3010 client = new ass1_comp3010(); // create new client object
         client.start(); // puts us into starting point for program
 
     }
@@ -58,37 +58,42 @@ public class Client {
     public void start(){
         
         int numGroups = inputNumberOfGroups(); // user input for getting num groups
+        
+        ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups); // takes string input and converts to an arrayList of arrayLists of integers
 
-        int[][] groupList = groupArrays(numGroups);
+        ArrayList<Person> personList = personList(groupDataLists, numGroups); // arrayList of people objects that contains what groups they are in etc.
 
+
+        // testing purposes
         System.out.println();
 
-
-        for (int i =0; i < groupList.length; i++){
-
-            int group = i + 1;
-
-            System.out.print("Group " + group + ": ");
-            for (int j = 0; j < groupList[i].length; j++){
-                System.out.print(groupList[i][j] + " ");
-            }
-            System.out.println();
-        }
+        for (int i = 0; i < personList.size(); i++){
+            personList.get(i).personToString();
+        } 
         
-        // ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups); // takes string input and converts to an arrayList of arrayLists of integers
-
-        // ArrayList<Person> personList = personList(groupDataLists, numGroups); // arrayList of people objects that contains what groups they are in etc.
-
-        // System.out.println();
-
-        // for (int i = 0; i < personList.size(); i++){
-        //     personList.get(i).personToString();
-        // } 
-
+        System.out.println();
         
+        personList = sortPersonList(personList);
+
+        // testing purposes
+        System.out.println();
+
+        for (int i = 0; i < personList.size(); i++){
+            personList.get(i).personToString();
+        } 
+           
+        System.out.println();
+
     }
 
      
+
+
+    // divide up functions by standard arrays operations and arraylist operations for ease of reading...
+    // quite confusing otherwise 
+    // these methods do the same exact same things but return different data-structures etc.
+    // hence are grouped seperately 
+    // done this way as I was unsure if ArrayLists were acceptable or not to use...
 
 
     /* 
@@ -174,23 +179,70 @@ public class Client {
     }
 
 
+
+    // method for sorting the arrayList of people...
+    // place holder to get things moving along
+    // TODO: change and optimise the sorting method...
+    public ArrayList<Person> sortPersonList(ArrayList<Person> pList){
+        
+        int size = pList.size(); // extract size of list and use this...
+        ArrayList<Person> sortedList = new ArrayList<Person>();
+
+        for (int i = 0; i < size; i++){
+            
+            // for each loop we find the lowest in the set
+            // and remove from the input array
+            // and add to the sorted list
+            // do this for each item in list...
+            // not an efficient way...
+            Person p = findMin(pList);
+            sortedList.add(0, p);
+
+            pList.remove(p);
+
+        }
+
+        // return back the sorted list
+        return sortedList;
+    }
+
+
+    // returns the person with highest # of active groups
+    public Person findMin(ArrayList<Person> pList){
+
+        int idx = 0;
+        
+        if (pList.get(idx).getActiveGroups() == 1){
+            return pList.get(idx);
+        }
+
+
+        for (int i = 0; i < pList.size(); i++){
+            if (i == 0){
+                idx = 0;
+                
+            } else {
+
+                if (pList.get(i).getActiveGroups() <= pList.get(idx).getActiveGroups()){ // compare current index value to i's value
+                    idx = i;
+                }
+
+            }
+
+        }
+
+        // return the element of list with the lowest number of active groups
+        return pList.get(idx);
+
+    }
+
+
     /* 
     
         ----------------------END ARRAYLIST METHODS----------------------
     
        
     */
-
-
-
-
-
-
-    // divide up functions by standard arrays operations and arraylist operations for ease of reading...
-    // quite confusing otherwise 
-    // these methods do the same exact same things but return different data-structures etc.
-    // hence are grouped seperately 
-
 
 
 
@@ -233,6 +285,25 @@ public class Client {
     /* 
     
         =======================END STANDARD ARRAY METHODS=======================
+
+
+        Some code here with how to use the standard array methods...
+        
+        int[][] groupList = groupArrays(numGroups);
+
+        System.out.println();
+
+
+        for (int i =0; i < groupList.length; i++){
+
+            int group = i + 1;
+
+            System.out.print("Group " + group + ": ");
+            for (int j = 0; j < groupList[i].length; j++){
+                System.out.print(groupList[i][j] + " ");
+            }
+            System.out.println();
+        }
     
     */
     
