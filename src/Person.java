@@ -72,7 +72,7 @@ public class Person {
 
     // if we can't find match
     // union two top people sets together then keep iterating through list...
-    public void createUnion(int[] gList){
+    public void createUnion(int[] gList){ // we go through both at same time, since we know they are both same size
 
         for (int i = 0; i < this.totalGroups; i++){
 
@@ -93,7 +93,7 @@ public class Person {
 
     // if we come across a point where they are both 0, then we know it's not a solution
     // so we return false, and check next item...
-    public boolean checkUnion(int[] gList){
+    public boolean checkUnion(int[] gList){ // we go through both at same time, since we know they are both same size
         
         for (int i = 0; i < this.totalGroups; i++){
 
@@ -107,14 +107,4 @@ public class Person {
     }
 
 
-    public void resetID(int id){
-        this.personID = id;
-    }
-
-
-    
-
-
-
-   // + " | as binary: " + this.getGroupBin()
 }

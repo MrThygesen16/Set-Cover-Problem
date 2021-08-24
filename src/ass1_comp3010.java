@@ -207,8 +207,15 @@ public class ass1_comp3010 {
             // and add to the sorted list
             // do this for each item in list...
             // not an efficient way...
-            Person p = findMin(pList);
-            sortedList.add(0, p);
+            Person p = findMax(pList);
+            sortedList.add(sortedList.size(), p);
+
+            if (p.getActiveGroups() == p.gettotalGroups()){
+
+                result(sortedList); // if the largest person we happen to find is a member of all groups 
+                System.exit(1); // -- return them and exit the program
+               
+            }
 
             pList.remove(p);
 
@@ -220,22 +227,17 @@ public class ass1_comp3010 {
 
 
     // returns the person with highest # of active groups
-    public Person findMin(ArrayList<Person> pList){
+    public Person findMax(ArrayList<Person> pList){
 
         int idx = 0;
         
-        if (pList.get(idx).getActiveGroups() == 1){
-            return pList.get(idx);
-        }
-
-
         for (int i = 0; i < pList.size(); i++){
             if (i == 0){
                 idx = 0;
                 
             } else {
 
-                if (pList.get(i).getActiveGroups() <= pList.get(idx).getActiveGroups()){ // compare current index value to i's value
+                if (pList.get(i).getActiveGroups() > pList.get(idx).getActiveGroups()){ // compare current index value to i's value
                     idx = i;
                 }
 
@@ -243,7 +245,7 @@ public class ass1_comp3010 {
 
         }
 
-        // return the element of list with the lowest number of active groups
+        // return the element of list with the highest number of active groups
         return pList.get(idx);
 
     }
@@ -281,9 +283,10 @@ public class ass1_comp3010 {
         pList.remove(0);
 
         return recursPeople(selectedPeople, pList); // if this method doesn't return anything we call a recursive function...
+
     }
 
-
+    
     // recursive method for finding the right combination of people
     // sList is selected person list
     // pList is the list of people to search through
@@ -305,6 +308,7 @@ public class ass1_comp3010 {
         pList.remove(0);
 
         return recursPeople(sList, pList);
+
     }
 
 
