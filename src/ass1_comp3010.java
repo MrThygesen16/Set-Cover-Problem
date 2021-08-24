@@ -84,6 +84,18 @@ public class ass1_comp3010 {
            
         System.out.println();
 
+
+        personList = selectedPersons(personList);
+
+        for (int i = 0; i < personList.size(); i++){
+            personList.get(i).personToString();
+        } 
+
+        System.out.println();
+
+
+        result(personList);
+
     }
 
      
@@ -235,6 +247,85 @@ public class ass1_comp3010 {
         return pList.get(idx);
 
     }
+
+
+
+    // BRUTE FORCE METHOD BEGINS
+
+    public ArrayList<Person> selectedPersons(ArrayList<Person> pList){
+
+        // what we return
+        ArrayList<Person> selectedPeople = new ArrayList<Person>();
+
+        // get first person from list and add it to this...
+
+        selectedPeople.add(pList.get(0));
+
+        pList.remove(0); // top most person is the person in most groups
+                        // they are added to the selected person list
+                        // so we don't compare against them
+
+        for (int i = 0; i < pList.size(); i++){
+            
+            boolean isMatch = selectedPeople.get(0).checkUnion(pList.get(i).getGroupList());
+
+            if (isMatch){
+                selectedPeople.add(pList.get(i));
+                return selectedPeople;
+            }
+
+        }
+
+        selectedPeople.add(pList.get(0));
+        selectedPeople.get(0).createUnion(pList.get(0).getGroupList());
+        pList.remove(0);
+
+        return recursPeople(selectedPeople, pList); // if this method doesn't return anything we call a recursive function...
+    }
+
+
+    // recursive method for finding the right combination of people
+    // sList is selected person list
+    // pList is the list of people to search through
+    public ArrayList<Person> recursPeople(ArrayList<Person> sList, ArrayList<Person> pList){
+
+        for (int i = 0; i < pList.size(); i++){
+            
+            boolean isMatch = sList.get(0).checkUnion(pList.get(i).getGroupList());
+
+            if (isMatch){
+                sList.add(pList.get(i));
+                return sList;
+            }
+
+        }
+
+        sList.add(pList.get(0));
+        sList.get(0).createUnion(pList.get(0).getGroupList());
+        pList.remove(0);
+
+        return recursPeople(sList, pList);
+    }
+
+
+    // given a combination is found we use this to print what people have been selected
+    public void result(ArrayList<Person> pList){
+
+        System.out.println("The number of members selected and their ids are : ");
+        System.out.println(pList.size());
+
+        for (int i = 0; i < pList.size(); i++){
+            if (i == pList.size()){
+                System.out.print(pList.get(i).getPersonID() + "\n");
+            } else {
+                System.out.print(pList.get(i).getPersonID() + " ");
+            }
+           
+        }
+
+    }
+
+
 
 
     /* 
