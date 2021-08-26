@@ -107,4 +107,37 @@ public class Person {
     }
 
 
+    public int sumUnion(int[] gList){
+        int sum = 0;
+
+        for (int i = 0; i < this.totalGroups; i++){
+
+            if (gList[i] == 1 && this.groups[i] == 0){
+                sum = sum + 1;
+            } else if (gList[i] == 0 && this.groups[i] == 0){
+                sum = sum - 1;
+            } 
+        }
+
+
+        return sum;
+    }
+
+
+
+    public boolean checkAllT(){ // we go through both at same time, since we know they are both same size
+        
+        for (int i = 0; i < this.totalGroups; i++){
+
+            if (this.groups[i] == 0){
+                return false;
+            } 
+        }
+
+
+        return true;
+    }
+
+
+
 }
