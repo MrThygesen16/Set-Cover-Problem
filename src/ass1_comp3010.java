@@ -8,13 +8,13 @@ public class ass1_comp3010 {
     Console console;
 
     public ass1_comp3010(){
-        console = System.console(); // make a Console object named console when class Client is created
+        console = System.console(); // make a Console object named console when new obj is created
     }
 
     
     public static void main(String[] args) throws Exception {
 
-        ass1_comp3010 client = new ass1_comp3010(); // create new client object
+        ass1_comp3010 client = new ass1_comp3010(); // instance of current object called client
         client.start(); // puts us into starting point for program
 
     }
@@ -61,18 +61,18 @@ public class ass1_comp3010 {
         
         ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups); // takes string input and converts to an arrayList of arrayLists of integers
 
-        ArrayList<Person> personList = personList(groupDataLists, numGroups); // arrayList of people objects that contains what groups they are in etc.
+        ArrayList<Person> pList = personList(groupDataLists, numGroups); // arrayList of people objects that contains what groups they are in etc.
 
 
         // debugg stuff
         System.out.println();
-        printPersonList(personList); // prints people to console
+        printPersonList(pList); // prints people to console
 
 
         // greedy
-        personList = greedyAlgo(personList);
+        pList = greedyAlgo(pList);
         System.out.println();
-        result(personList);
+        result(pList);
 
     }
 
@@ -244,10 +244,8 @@ public class ass1_comp3010 {
         pList.remove(p); // remove selected person from them from pList (the list of unsorted people)
 
         // if this person alone is active in all groups -> we are done... (this is an edge case)
-        if (p.getActiveGroups() == p.gettotalGroups()){
-                    
+        if (p.activeVsTotal()){
             return retList;// if the largest person we happen to find is a member of all groups 
-        
         }
 
         int maxIdx = 0; // max index
@@ -291,29 +289,29 @@ public class ass1_comp3010 {
     public ArrayList<Person> chosenP(ArrayList<Person> mList, ArrayList<Person> pList){
         
         // base case 
-        // if mList has all 1s return it -- found solution
-        if(mList.get(0).checkAllT()){
-
+        // if mList has its num active groups equal to number of groups
+        // solution found so we return immmediately
+        if (mList.get(0).activeVsTotal()){
             return mList;
-        } 
-      
+        }
+        
       
         int maxIdx = 0;
         int maxVal = 0;
 
         for (int i = 0; i < pList.size(); i++){
             
-            if (i == 0){
+            if (i == 0){ // first loop the max is initially the first item...
                 maxVal = mList.get(0).sumUnion(pList.get(i).getGroupList());
             } 
         
         
             int curr = mList.get(0).sumUnion(pList.get(i).getGroupList()); // curr sum
             
-
+            // if we come across a better score
             if (curr > maxVal){
-                maxVal = curr;
-                maxIdx = i;
+                maxVal = curr; // new best score is current
+                maxIdx = i; // new index is i
             }
 
         }
@@ -328,7 +326,6 @@ public class ass1_comp3010 {
    
         return chosenP(mList, pList);
     }
-
 
 
 

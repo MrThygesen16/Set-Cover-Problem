@@ -73,35 +73,13 @@ public class Person {
 
         for (int i = 0; i < this.totalGroups; i++){
 
+            // if other person has 1 and current has 0, union and make total active groups + 1
             if (gList[i] == 1 && this.groups[i] == 0){
                 this.groups[i] = 1;
-            } else if (gList[i] == 0 && this.groups[i] == 1){
-                this.groups[i] = 1;
-            } else if (gList[i] == 1 && this.groups[i] == 1){
-                this.groups[i] = 1;
-            } else {
-                this.groups[i] = 0;
-            }
-
-        }
-
-    }
-
-
-    // if we come across a point where they are both 0, then we know it's not a solution
-    // so we return false, and check next item...
-    // not used anymore but left in because it's useful...
-    public boolean checkUnion(int[] gList){ // we go through both at same time, since we know they are both same size
-        
-        for (int i = 0; i < this.totalGroups; i++){
-
-            if (gList[i] == 0 && this.groups[i] == 0){
-                return false;
+                this.activeGroups += 1; 
             } 
         }
 
-
-        return true;
     }
 
 
@@ -125,6 +103,33 @@ public class Person {
     }
 
 
+    // if the current max has group numbers == to the total then solution found
+    public boolean activeVsTotal(){
+        if (this.activeGroups == this.totalGroups){
+            return true;
+        } 
+
+        return false;
+    }
+
+
+
+    // if we come across a point where they are both 0, then we know it's not a solution
+    // so we return false, and check next item...
+    // not used anymore but left in because it's useful...
+    public boolean checkUnion(int[] gList){ // we go through both at same time, since we know they are both same size
+        
+        for (int i = 0; i < this.totalGroups; i++){
+
+            if (gList[i] == 0 && this.groups[i] == 0){
+                return false;
+            } 
+        }
+
+
+        return true;
+    }
+
 
     // check if all 1s
     // if we come across a 0 then we know it's not complete
@@ -136,8 +141,6 @@ public class Person {
                 return false;
             } 
         }
-
-
         return true;
     }
 
