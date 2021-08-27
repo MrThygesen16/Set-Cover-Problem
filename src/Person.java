@@ -1,6 +1,3 @@
-
-
-
 public class Person {
     
     // private so we don't accidently change the values...
@@ -93,6 +90,7 @@ public class Person {
 
     // if we come across a point where they are both 0, then we know it's not a solution
     // so we return false, and check next item...
+    // not used anymore but left in because it's useful...
     public boolean checkUnion(int[] gList){ // we go through both at same time, since we know they are both same size
         
         for (int i = 0; i < this.totalGroups; i++){
@@ -107,25 +105,30 @@ public class Person {
     }
 
 
+    // calcualates the union between current person and another
+    // where score is how ideal they would be to union
     public int sumUnion(int[] gList){
-        int sum = 0;
+        int score = 0;
 
         for (int i = 0; i < this.totalGroups; i++){
-
-            if (gList[i] == 1 && this.groups[i] == 0){
-                sum = sum + 1;
-            } else if (gList[i] == 0 && this.groups[i] == 0){
-                sum = sum - 1;
+            // gList is other person        this.groups is current persons list (assuming the max person)
+            if (gList[i] == 1 && this.groups[i] == 0){ // if the other person has a 1 current has a 0 this is ideal + 1 to score
+                score = score + 1;
+            // should we even worry about negative scoring?
+            } else if ((gList[i] == 0 && this.groups[i] == 0) || (gList[i] == 1 && this.groups[i] == 1)){ // if both other and current person have 0s -- not ideal... -1 to score
+                score = score - 1; 
             } 
         }
 
-
-        return sum;
+        // higher the score the better...
+        return score;
     }
 
 
 
-    public boolean checkAllT(){ // we go through both at same time, since we know they are both same size
+    // check if all 1s
+    // if we come across a 0 then we know it's not complete
+    public boolean checkAllT(){ 
         
         for (int i = 0; i < this.totalGroups; i++){
 
