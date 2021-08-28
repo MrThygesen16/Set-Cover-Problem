@@ -24,7 +24,8 @@ public class Person {
     // e.g. group ID = 5, and totalGroups = 6 --> person would need to go to index of 1... which is 6 - 5.
     public void addToList(int groupID){
 
-        int idx = this.totalGroups-groupID; // index for given group ID
+       // int idx = this.totalGroups-groupID; // index for given group ID
+        int idx = groupID-1; // index for given group ID
         int binRep = groupID/groupID; // to get current 1, 0 etc.
 
         groups[idx] = binRep; 

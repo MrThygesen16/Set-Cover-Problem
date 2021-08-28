@@ -57,23 +57,42 @@ public class ass1_comp3010 {
     // this is where we will call most of our functions
     public void start(){
         
-        int numGroups = inputNumberOfGroups(); // user input for getting num groups
+        // user input for getting num groups
+        int numGroups = inputNumberOfGroups(); 
         
-        ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups); // takes string input and converts to an arrayList of arrayLists of integers
+        // takes string input and converts to an arrayList of arrayLists of integers
+        ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups); 
 
-        ArrayList<Person> pList = personList(groupDataLists, numGroups); // arrayList of people objects that contains what groups they are in etc.
+        // arrayList of people objects that contains what groups they are in etc.
+        ArrayList<Person> pList = personList(groupDataLists, numGroups);
 
 
-        // debugg stuff
+
+        // debugg stuff -- DELETE THIS
         System.out.println();
-        printPersonList(pList); // prints people to console
+        // prints people to console
+        printPersonList(pList);
+        // end debug -- DELETE THIS
 
 
-        // greedy
-        pList = greedyAlgo(pList);
+        // resultList is the list we return at the end
+        ArrayList<Person> resultList = new ArrayList<Person>();
+
+        // person from pList who is in most groups
+        Person maxP = findMaxActiveGroups(pList);
+
+        // remove person in most groups from pList
+        pList.remove(maxP);
+
+        // add person in most groups to resultList
+        resultList.add(maxP);
+
+        // greedy algo, input result list and pList
+        resultList = greedyAlgo(resultList, pList);
         System.out.println();
-        result(pList);
+        displayResult(resultList);
 
+        // program ends 
     }
 
      
@@ -125,7 +144,8 @@ public class ass1_comp3010 {
         String[] splitStr = lineIn.split("\\s+");
         ArrayList<Integer> returnList = new ArrayList<Integer>();
 
-        for (int i = 0; i < splitStr.length-1; i ++){ // we do -1 to ommit the 0 at the end
+        // length-1 to ommit the end of line character 0 
+        for (int i = 0; i < splitStr.length-1; i ++){ 
             returnList.add(i, Integer.parseInt(splitStr[i]));
         }
 
@@ -135,7 +155,7 @@ public class ass1_comp3010 {
 
     // given an arrayList of arraylists of integers (groups and their people)
     // this returns a list of people and their groups (an arrayList of People objects)
-    // TODO: optimise methdd -- three for loops!
+    // TODO: optimise methdd -- 3 for loops!
     public ArrayList<Person> personList(ArrayList<ArrayList<Integer>> arrArrList, int numGrps){
 
         ArrayList<Integer> containList = new ArrayList<Integer>(); // list for keeping track of what people have been seen
@@ -180,33 +200,28 @@ public class ass1_comp3010 {
    
     // used for greedy and brute force methods
     // returns the person with highest # of active groups
-    public Person findMax(ArrayList<Person> pList){
+    public Person findMaxActiveGroups(ArrayList<Person> pList){
 
         int idx = 0;
         
-        for (int i = 0; i < pList.size(); i++){
-            if (i == 0){
-                idx = 0;
-                
-            } else {
-
-                if (pList.get(i).getActiveGroups() > pList.get(idx).getActiveGroups()){ // compare current index value to i's value
-                    idx = i;
-                }
-
+        for (int i = 1; i < pList.size(); i++){
+      
+            // if the current i active groups is larger than the idx that's currently the largest
+            // then the new largest index becomes i
+            if (pList.get(i).getActiveGroups() > pList.get(idx).getActiveGroups()){
+                idx = i;
             }
-
         }
 
         // return the element of list with the highest number of active groups
         return pList.get(idx);
-
     }
 
 
+    
     // for showing the result...
     // given a combination is found we use this to print what people have been selected
-    public void result(ArrayList<Person> pList){
+    public void displayResult(ArrayList<Person> pList){
 
         System.out.println("The number of members selected and their ids are : ");
         System.out.println(pList.size());
@@ -235,58 +250,11 @@ public class ass1_comp3010 {
     
     */
 
-    // start point of greedy method
-    public ArrayList<Person> greedyAlgo(ArrayList<Person> pList){
-
-        ArrayList<Person> retList = new ArrayList<Person>(); // create list for storing selected person(s)
-        Person p = findMax(pList); // find person that is active in most groups
-        retList.add(0,p); // add to retList
-        pList.remove(p); // remove selected person from them from pList (the list of unsorted people)
-
-        // if this person alone is active in all groups -> we are done... (this is an edge case)
-        if (p.activeVsTotal()){
-            return retList;// if the largest person we happen to find is a member of all groups 
-        }
-
-        int maxIdx = 0; // max index
-        int maxVal = 0; // max value
-
-        // essentially we add up and compare each persons 'score' to the current max person
-        // assuming we don't find a match straight away
-        // the person with the best score is used for union in the next iteration
-        // repeat until match --> call recursive method of this function
-        for (int i = 0; i < pList.size(); i++){
-            
-            if (i == 0){
-                maxVal = retList.get(0).sumUnion(pList.get(i).getGroupList());
-            } 
-        
-        
-            int curr = retList.get(0).sumUnion(pList.get(i).getGroupList()); // curr sum
-            
-
-            if (curr > maxVal){
-                maxVal = curr;
-                maxIdx = i;
-            }
-        }
-
-        Person temp = pList.get(maxIdx);
-
-        retList.add(temp);
-        retList.get(0).createUnion(temp.getGroupList());
-        pList.remove(temp);
-
-
-        return chosenP(retList, pList);
-    }
-
-
-
+   
     // recursive function for greedy method
-    // does the same thing as above method
-    // however takes in the previous chosen list (mList) and previous person list to be searched through (pList)
-    public ArrayList<Person> chosenP(ArrayList<Person> mList, ArrayList<Person> pList){
+    // mList is the list of chosen people
+    // pList is the list of all people
+    public ArrayList<Person> greedyAlgo(ArrayList<Person> mList, ArrayList<Person> pList){
         
         // base case 
         // if mList has its num active groups equal to number of groups
@@ -324,7 +292,7 @@ public class ass1_comp3010 {
         pList.remove(temp); // remove selected p from pList
 
    
-        return chosenP(mList, pList);
+        return greedyAlgo(mList, pList);
     }
 
 
@@ -350,8 +318,11 @@ public class ass1_comp3010 {
     
     
     
-    brute force  STARTS HERE
-    
+        UN-USED CODE GOES HEre
+
+        this is brute-force and other attempts at solving the problem
+        left here to preserve the code
+        but also so I may revisit this and see how my solution progressed...
     
 
     
@@ -379,12 +350,12 @@ public class ass1_comp3010 {
             // and add to the sorted list
             // do this for each item in list...
             // not an efficient way...
-            Person p = findMax(pList);
+            Person p = findMaxActiveGroups(pList);
             sortedList.add(sortedList.size(), p);
 
             if (p.getActiveGroups() == p.gettotalGroups()){
 
-                result(sortedList); // if the largest person we happen to find is a member of all groups 
+                displayResult(sortedList); // if the largest person we happen to find is a member of all groups 
                 System.exit(1); // -- return them and exit the program
                
             }
