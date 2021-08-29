@@ -69,9 +69,9 @@ public class ass1_comp3010 {
 
 
         // debugg stuff -- DELETE THIS
-        System.out.println();
+       // System.out.println();
         // prints people to console
-        printPersonList(pList);
+        //printPersonList(pList);
         // end debug -- DELETE THIS
 
 
@@ -90,6 +90,8 @@ public class ass1_comp3010 {
         // greedy algo, input result list and pList
         resultList = greedyAlgo(resultList, pList);
         System.out.println();
+
+        // method shows the selected groups from resultList
         displayResult(resultList);
 
         // program ends 

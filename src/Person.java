@@ -70,12 +70,12 @@ public class Person {
 
     // if we can't find match
     // union two top people sets together then keep iterating through list...
-    public void createUnion(int[] gList){ // we go through both at same time, since we know they are both same size
+    public void createUnion(int[] otherList){ // we go through both at same time, since we know they are both same size
 
         for (int i = 0; i < this.totalGroups; i++){
 
             // if other person has 1 and current has 0, union and make total active groups + 1
-            if (gList[i] == 1 && this.groups[i] == 0){
+            if (otherList[i] == 1 && this.groups[i] == 0){
                 this.groups[i] = 1;
                 this.activeGroups += 1; 
             } 
@@ -86,15 +86,15 @@ public class Person {
 
     // calcualates the union between current person and another
     // where score is how ideal they would be to union
-    public int sumUnion(int[] gList){
+    public int sumUnion(int[] otherList){
         int score = 0;
 
         for (int i = 0; i < this.totalGroups; i++){
             // gList is other person        this.groups is current persons list (assuming the max person)
-            if (gList[i] == 1 && this.groups[i] == 0){ // if the other person has a 1 current has a 0 this is ideal + 1 to score
+            if (otherList[i] == 1 && this.groups[i] == 0){ // if the other person has a 1 current has a 0 this is ideal + 1 to score
                 score = score + 1;
             // should we even worry about negative scoring?
-            } else if ((gList[i] == 0 && this.groups[i] == 0) || (gList[i] == 1 && this.groups[i] == 1)){ // if both other and current person have 0s -- not ideal... -1 to score
+            } else if ((otherList[i] == 0 && this.groups[i] == 0) || (otherList[i] == 1 && this.groups[i] == 1)){ // if both other and current person have 0s -- not ideal... -1 to score
                 score = score - 1; 
             } 
         }
@@ -118,11 +118,11 @@ public class Person {
     // if we come across a point where they are both 0, then we know it's not a solution
     // so we return false, and check next item...
     // not used anymore but left in because it's useful...
-    public boolean checkUnion(int[] gList){ // we go through both at same time, since we know they are both same size
+    public boolean checkUnion(int[] otherList){ // we go through both at same time, since we know they are both same size
         
         for (int i = 0; i < this.totalGroups; i++){
 
-            if (gList[i] == 0 && this.groups[i] == 0){
+            if (otherList[i] == 0 && this.groups[i] == 0){
                 return false;
             } 
         }
