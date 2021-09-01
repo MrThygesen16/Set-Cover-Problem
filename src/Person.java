@@ -93,8 +93,8 @@ public class Person {
             // gList is other person        this.groups is current persons list (assuming the max person)
             if (otherList[i] == 1 && this.groups[i] == 0){ // if the other person has a 1 current has a 0 this is ideal + 1 to score
                 score = score + 1;
-            // should we even worry about negative scoring?
-            } else if ((otherList[i] == 0 && this.groups[i] == 0) || (otherList[i] == 1 && this.groups[i] == 1)){ // if both other and current person have 0s -- not ideal... -1 to score
+            // should we even worry about negative scoring?            note: the line commented below improves one test case drastically at the cost of making another slightly worse...
+            } else if ((otherList[i] == 0 && this.groups[i] == 0) ){ //|| (otherList[i] == 1 && this.groups[i] == 1)){ // if both other and current person have 0s -- not ideal... -1 to score
                 score = score - 1; 
             } 
         }

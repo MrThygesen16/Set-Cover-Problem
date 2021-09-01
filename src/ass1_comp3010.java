@@ -1,14 +1,14 @@
-import java.io.Console;
+import java.util.*;
 import java.util.ArrayList;
 
 public class ass1_comp3010 {
     
-    // initialise console object
+    // init scanner object
     // for reading user input
-    Console console;
+    Scanner in;
 
     public ass1_comp3010(){
-        console = System.console(); // make a Console object named console when new obj is created
+        in  = new Scanner(System.in); // make a Console object named console when new obj is created
     }
 
     
@@ -23,12 +23,12 @@ public class ass1_comp3010 {
     // str is instructions for the user (e.g. "Enter the number of groups: [user input]")
     //      note: str can be empty
     // msg is the value that the user will enter
-    public String userInput(String str){
+    // public String userInput(String str){
+    //     System.out.print(str+"\n");
+    //     String msg = in.nextLine();
+    //     return msg;
 
-        String msg = console.readLine(str);
-        return msg;
-
-    }
+    // }
 
     // process input for number of groups
     public int strToInt(String str){ 
@@ -47,7 +47,9 @@ public class ass1_comp3010 {
 
     // method that prompts user to give input -- converts it to an Int and returns int value
     public int inputNumberOfGroups(){
-        String strGroupNum = userInput("Enter the number of groups from which you must find representatives: ");
+        System.out.print("Enter the number of groups from which you must find representatives: ");
+        String strGroupNum = in.nextLine();
+        System.out.print(strGroupNum+"\n");
         int numGroups = strToInt(strGroupNum);
 
         return numGroups;
@@ -127,10 +129,11 @@ public class ass1_comp3010 {
 
         ArrayList<ArrayList<Integer>> returnList = new ArrayList<ArrayList<Integer>>();
 
-        console.printf("Enter the list of members of each group (one group per line, each terminated by 0):\n");
+        System.out.println("Enter the list of members of each group (one group per line, each terminated by 0): ");
     
         for (int i = 0; i < numGroups; i++){
-            String tempStr = userInput("");
+            String tempStr = in.nextLine();
+            System.out.println(tempStr);
             returnList.add(groupLineToList(tempStr));
         }
 
@@ -475,18 +478,18 @@ public class ass1_comp3010 {
 
     // construct an array of arrays        
     // if not used: here is how to call this method...  int[][] groupList = groupArrays(numGroups);
-    public int[][] groupArrays(int numGroups){
-        int[][] groupOfGroups = new int[numGroups][];
+    // public int[][] groupArrays(int numGroups){
+    //     int[][] groupOfGroups = new int[numGroups][];
 
-        console.printf("Enter the list of members of each group (one group per line, each terminated by 0):\n");
+    //     System.out.println("Enter the list of members of each group (one group per line, each terminated by 0):\n");
 
-        for (int i = 0; i < numGroups; i++){
-            String tempStr = userInput("");
-            groupOfGroups[i] = groupToArray(tempStr);
-        }
+    //     for (int i = 0; i < numGroups; i++){
+    //         String tempStr = userInput("");
+    //         groupOfGroups[i] = groupToArray(tempStr);
+    //     }
 
-        return groupOfGroups;
-    }
+    //     return groupOfGroups;
+    // }
 
     /* 
     
