@@ -49,7 +49,7 @@ public class ass1_comp3010 {
     public int inputNumberOfGroups(){
         System.out.print("Enter the number of groups from which you must find representatives: ");
         String strGroupNum = in.nextLine();
-        System.out.print(strGroupNum+"\n");
+        //System.out.print(strGroupNum);
         int numGroups = strToInt(strGroupNum);
 
         return numGroups;
@@ -129,11 +129,11 @@ public class ass1_comp3010 {
 
         ArrayList<ArrayList<Integer>> returnList = new ArrayList<ArrayList<Integer>>();
 
-        System.out.println("Enter the list of members of each group (one group per line, each terminated by 0): ");
+        System.out.println("\nEnter the list of members of each group (one group per line, each terminated by 0): ");
     
         for (int i = 0; i < numGroups; i++){
             String tempStr = in.nextLine();
-            System.out.println(tempStr);
+            //System.out.println(tempStr);
             returnList.add(groupLineToList(tempStr));
         }
 
@@ -228,7 +228,7 @@ public class ass1_comp3010 {
     // given a combination is found we use this to print what people have been selected
     public void displayResult(ArrayList<Person> pList){
 
-        System.out.println("The number of members selected and their ids are : ");
+        System.out.println("The number of members selected and their ids are: ");
         System.out.println(pList.size());
 
         for (int i = 0; i < pList.size(); i++){
