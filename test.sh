@@ -15,7 +15,7 @@ case $var in
         javac ass1_comp3010.java
 
         # for loop; f is file, tests/* is all the files in the folder 'src/tests/'
-        for f in tests/*; 
+        for f in ../tests/*; 
             do echo $'\n=============================================';
             echo $'\t' "Testing file: $f"; 
             echo $'=============================================';
@@ -27,6 +27,9 @@ case $var in
         # the above is some formatting to make the output look nice
 
         # finish loop and exit the script
+
+        # Show we are at end of test set
+        echo $'\t~~~Tests Completed~~~'
         ;;
 
     *) 
@@ -43,13 +46,13 @@ case $var in
         
 
         # show file contents...        
-        cat tests/$var
+        cat ../tests/$var
 
         echo $'\n=============================================\n'
 
   
         # run java class with input test...
-        java ass1_comp3010 < tests/$var
+        java ass1_comp3010 < ../tests/$var
         ;;
     
 esac
