@@ -1,5 +1,7 @@
-import java.util.*;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.LinkedHashMap;
+// essential imports
 
 public class ass1_comp3010 {
     
@@ -7,11 +9,12 @@ public class ass1_comp3010 {
     // for reading user input
     Scanner in;
 
+    // constructor definition for class
     public ass1_comp3010(){
         in  = new Scanner(System.in); // make a Console object named console when new obj is created
     }
 
-    
+    // MAIN
     public static void main(String[] args) throws Exception {
 
         ass1_comp3010 client = new ass1_comp3010(); // instance of current object called client
@@ -19,21 +22,12 @@ public class ass1_comp3010 {
 
     }
 
-    // allows users to send messages to the console
-    // str is instructions for the user (e.g. "Enter the number of groups: [user input]")
-    //      note: str can be empty
-    // msg is the value that the user will enter
-    // public String userInput(String str){
-    //     System.out.print(str+"\n");
-    //     String msg = in.nextLine();
-    //     return msg;
-
-    // }
 
     // process input for number of groups
     public int strToInt(String str){ 
         
-        int num = -1; // if try fails we return -1 to indicate failure
+        // if try fails we return -1 to indicate failure
+        int num = -1; 
     
         try {
             num = Integer.parseInt(str);
@@ -57,6 +51,7 @@ public class ass1_comp3010 {
 
 
     // this is where we will call most of our functions
+    // essentially like main
     public void start(){
         
         // user input for getting num groups
@@ -66,15 +61,7 @@ public class ass1_comp3010 {
         ArrayList<ArrayList<Integer>> groupDataLists = strArrToArrList(numGroups); 
 
         // arrayList of people objects that contains what groups they are in etc.
-        ArrayList<Person> pList = personList(groupDataLists, numGroups);
-
-
-
-        // debugg stuff -- DELETE THIS
-       // System.out.println();
-        // prints people to console
-        //printPersonList(pList);
-        // end debug -- DELETE THIS
+        ArrayList<Person> pList = personListHash(groupDataLists, numGroups);
 
 
         // resultList is the list we return at the end
@@ -90,13 +77,13 @@ public class ass1_comp3010 {
         resultList.add(maxP);
 
         // greedy algo, input result list and pList
-        resultList = greedyAlgo(resultList, pList);
+        resultList = solver(resultList, pList);
         System.out.println();
 
         // method shows the selected groups from resultList
+        // program ends once this is called.
         displayResult(resultList);
 
-        // program ends 
     }
 
      
@@ -146,6 +133,7 @@ public class ass1_comp3010 {
     // return that arrayList of integers
     public ArrayList<Integer> groupLineToList(String lineIn){ 
 
+        // create an array of strings by splitting by whitespace 
         String[] splitStr = lineIn.split("\\s+");
         ArrayList<Integer> returnList = new ArrayList<Integer>();
 
@@ -158,13 +146,14 @@ public class ass1_comp3010 {
     }
 
 
+ 
     // given an arrayList of arraylists of integers (groups and their people)
     // this returns a list of people and their groups (an arrayList of People objects)
-    // TODO: optimise methdd -- 3 for loops!
-    public ArrayList<Person> personList(ArrayList<ArrayList<Integer>> arrArrList, int numGrps){
+    public ArrayList<Person> personListHash(ArrayList<ArrayList<Integer>> arrArrList, int numGrps){
 
-        ArrayList<Integer> containList = new ArrayList<Integer>(); // list for keeping track of what people have been seen
-        ArrayList<Person> pList = new ArrayList<Person>(); // the list we will return at the end of this method
+        // we use a LinkedHashMap since it preserves ordering... (hashmpa does not preserve ordering) 
+        // this hash-map stores the persons ID as a key, and the person object as a value... 
+        LinkedHashMap<Integer, Person> contList = new LinkedHashMap<Integer, Person>();
 
         int group = 1; // we parse this in when we create a new person object
 
@@ -172,25 +161,35 @@ public class ass1_comp3010 {
            
             for (Integer num : list){ // iterating through each person in a group
                 
-                if (!containList.contains(num)){ // check if person's ID exists in containList (integer arrayList)
-                    containList.add(num); // if they don't exist we add them to this arrayList and create a new person object and add it to the pList
+                // checking if person ID exists in contList
+                // since we are using a hashmap -- contains takes O(1)!
+                if (!contList.containsKey(num)){ 
 
+                    // if they don't exist we add them to the contList...
+                    // by creating a person object using num as their ID, numGrps for number of groups
+                    // p.add(group) adds to the persons array of the active groups they are in...
                     Person p = new Person(num, numGrps);
                     p.addToList(group);
-                    pList.add(p);
+                    contList.put(num,p);
 
-                } else { // if we come across a person that already exists we log which group we saw them in
-                    for (int i = 0; i < pList.size(); i++){
-                        if (pList.get(i).getPersonID() == num){ 
-                            pList.get(i).addToList(group);
-                        }
-                    }
+                } else { 
+                    
+                    // if we come across a person that already exists we log which group we saw them in
+                    // use the num (personID) to retrieve person and add the group where we saw them to their active group list
+                    // get(id) in a hashmap only takes O(1)
+                    contList.get(num).addToList(group);
+
                 }
             }
 
-            group = group + 1; // each time iterate group # since we are moving on to the next group when we reach this point
+            // each time iterate group # since we are moving on to the next group when we reach this point
+            group = group + 1; 
         }
 
+        // the list we will return at the end of this method
+        ArrayList<Person> pList = new ArrayList<Person>(contList.values()); 
+
+        // end of method; return pList
         return pList; 
     }
 
@@ -232,11 +231,8 @@ public class ass1_comp3010 {
         System.out.println(pList.size());
 
         for (int i = 0; i < pList.size(); i++){
-            if (i == pList.size()){
-                System.out.print(pList.get(i).getPersonID() + "\n");
-            } else {
-                System.out.print(pList.get(i).getPersonID() + " ");
-            }
+            
+            System.out.print(pList.get(i).getPersonID() + " ");
            
         }
 
@@ -248,58 +244,65 @@ public class ass1_comp3010 {
     
     
     
-    GREEDY HEURISTIC STARTS HERE
+   SOLVER/GREEDY HEURISTIC STARTS HERE
     
     
     
     
     */
 
-   
-    // recursive function for greedy method
+  
     // mList is the list of chosen people
     // pList is the list of all people
-    public ArrayList<Person> greedyAlgo(ArrayList<Person> mList, ArrayList<Person> pList){
+    public ArrayList<Person> solver(ArrayList<Person> mList, ArrayList<Person> pList){
         
-        // base case 
-        // if mList has its num active groups equal to number of groups
-        // solution found so we return immmediately
-        if (mList.get(0).activeVsTotal()){
-            return mList;
-        }
-        
-      
-        int maxIdx = 0;
-        int maxVal = 0;
+        while (!pList.isEmpty()){
+            int maxIdx = 0;
+            int maxVal = 0;
 
-        for (int i = 0; i < pList.size(); i++){
-            
-            if (i == 0){ // first loop the max is initially the first item...
-                maxVal = mList.get(0).sumUnion(pList.get(i).getGroupList());
-            } 
-        
-        
-            int curr = mList.get(0).sumUnion(pList.get(i).getGroupList()); // curr sum
-            
-            // if we come across a better score
-            if (curr > maxVal){
-                maxVal = curr; // new best score is current
-                maxIdx = i; // new index is i
+            // base case 
+            // if mList has its num active groups equal to number of groups
+            // solution found so we return immmediately
+            if (mList.get(0).activeVsTotal()){
+                return mList;
             }
 
+            for (int i = 0; i < pList.size(); i++){
+            
+                // first loop the max is initially the first item...
+                if (i == 0){ 
+                    maxVal = mList.get(0).sumUnion(pList.get(i).getGroupList());
+                } 
+                
+                // cunion between the first item in mList and current person (i) in pList
+                // sumUnion uses a for loop to find the binary OR of the two people
+                int curr = mList.get(0).sumUnion(pList.get(i).getGroupList()); 
+                
+                // if we come across a better score
+                if (curr > maxVal){
+                    maxVal = curr; // new best score is current
+                    maxIdx = i; // new index is i
+                }
+    
+            }
+    
+            // get person at the max index
+            Person temp = pList.get(maxIdx);
+    
+            // add and union selected person (temp)
+            mList.add(temp); 
+            mList.get(0).createUnion(temp.getGroupList()); 
+    
+            // remove selected p from pList
+            pList.remove(temp); 
+    
+            // if made it this far; recursive call
+        
         }
 
-        Person temp = pList.get(maxIdx);
+        return mList;
 
-        mList.add(temp); // add and union selected p
-        mList.get(0).createUnion(temp.getGroupList()); 
-
-        pList.remove(temp); // remove selected p from pList
-
-   
-        return greedyAlgo(mList, pList);
     }
-
 
 
     /* 
@@ -317,6 +320,14 @@ public class ass1_comp3010 {
     // greedy is an alteration
     // keeping both so I may compare...
 
+
+    /* 
+    
+    
+        ACTUAL PROGRAM ENDS HERE; REST IS UNUSED/SAVED CODE...
+    
+    
+    */
 
 
     /* 
@@ -339,6 +350,93 @@ public class ass1_comp3010 {
 
     
     */
+
+ 
+    // recursive function for greedy method
+    // mList is the list of chosen people
+    // pList is the list of all people
+    public ArrayList<Person> greedyAlgo(ArrayList<Person> mList, ArrayList<Person> pList){
+        
+        // base case 
+        // if mList has its num active groups equal to number of groups
+        // solution found so we return immmediately
+        if (mList.get(0).activeVsTotal()){
+            return mList;
+        }
+        
+      
+        int maxIdx = 0;
+        int maxVal = 0;
+
+        for (int i = 0; i < pList.size(); i++){
+            
+            // first loop the max is initially the first item...
+            if (i == 0){ 
+                maxVal = mList.get(0).sumUnion(pList.get(i).getGroupList());
+            } 
+            
+            // cunion between the first item in mList and current person (i) in pList
+            // sumUnion uses a for loop to find the binary OR of the two people
+            int curr = mList.get(0).sumUnion(pList.get(i).getGroupList()); 
+            
+            // if we come across a better score
+            if (curr > maxVal){
+                maxVal = curr; // new best score is current
+                maxIdx = i; // new index is i
+            }
+
+        }
+
+        // get person at the max index
+        Person temp = pList.get(maxIdx);
+
+        // add and union selected person (temp)
+        mList.add(temp); 
+        mList.get(0).createUnion(temp.getGroupList()); 
+
+        // remove selected p from pList
+        pList.remove(temp); 
+
+        // if made it this far; recursive call
+        return greedyAlgo(mList, pList);
+    }
+
+
+   // given an arrayList of arraylists of integers (groups and their people)
+    // this returns a list of people and their groups (an arrayList of People objects)
+    public ArrayList<Person> personList(ArrayList<ArrayList<Integer>> arrArrList, int numGrps){
+
+        ArrayList<Integer> containList = new ArrayList<Integer>(); // list for keeping track of what people have been seen
+        ArrayList<Person> pList = new ArrayList<Person>(); // the list we will return at the end of this method
+
+        int group = 1; // we parse this in when we create a new person object
+
+        for (ArrayList<Integer> list : arrArrList){ // iterating through each group
+           
+            for (Integer num : list){ // iterating through each person in a group
+                
+                if (!containList.contains(num)){ // check if person's ID exists in containList (integer arrayList)
+                    containList.add(num); // if they don't exist we add them to this arrayList and create a new person object and add it to the pList
+
+                    Person p = new Person(num, numGrps);
+                    p.addToList(group);
+                    pList.add(p);
+
+                } else { // if we come across a person that already exists we log which group we saw them in
+                    for (int i = 0; i < pList.size(); i++){
+                        if (pList.get(i).getPersonID() == num){ 
+                            pList.get(i).addToList(group);
+                        }
+                    }
+                }
+            }
+
+            group = group + 1; // each time iterate group # since we are moving on to the next group when we reach this point
+        }
+
+        return pList; 
+    }
+
 
 
     // method for sorting the arrayList of people...
