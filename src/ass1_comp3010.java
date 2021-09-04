@@ -278,15 +278,25 @@ public class ass1_comp3010 {
                 
                 // only check the union if the persons active groups greater than the maxVal
                 if (pList.get(i).getActiveGroups() > maxVal){
+                        
+                        // set curr to 0 initially
                         // curr is the score of the union between the first item in mList and current person (i) in pList
-                        int curr = resultList.get(0).sumUnion(pList.get(i).getGroupList()); 
-       
-                        // if we come across a better score
-                        if (curr > maxVal){
-                            maxVal = curr; // new best score is current
-                            maxIdx = i; // new index is i
+                        int curr = 0;
+                        
+                        // checks (true/false) if the current person has a score that's greater than 0...
+                        if (pList.get(i).getFeasible()){
+                            // if they are feasible check the union...
+                            curr = resultList.get(0).sumUnion(pList.get(i).getGroupList()); 
                         }
 
+                        // if the score for current person is 0, we mark them as infeasible
+                        if (curr == 0){ 
+                            pList.get(i).notFeasible();
+                        } else if (curr > maxVal) {  // if we come across a better score
+                            maxVal = curr; // new best score is current
+                            maxIdx = i; // new index is i
+                        } 
+                        
                 }
 
                

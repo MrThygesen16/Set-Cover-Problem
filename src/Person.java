@@ -9,6 +9,7 @@ public class Person {
 
     private int activeGroups; // how many groups a particular person is in
 
+    private boolean feasible; // to mark non-feasible people
 
     // constructor with person ID and number og groups they are in
     // creates array of ints to hold group
@@ -16,6 +17,7 @@ public class Person {
         this.personID = persID;
         this.totalGroups = numGps;
         this.groups = new int[this.totalGroups];
+        this.feasible = true;
     }
 
     // when we create a new person object or come across the same person in a different group
@@ -53,6 +55,16 @@ public class Person {
        return this.activeGroups;
     }
 
+    public boolean getFeasible(){
+        return this.feasible;
+    }
+
+
+    // person is not feasible for solution
+    // so they are ignored...
+    public void notFeasible(){
+        this.feasible = false;
+    }
 
     // debug method for verifying correct mapping of groups to a person
     public void personToString(){
@@ -94,7 +106,7 @@ public class Person {
                 score = score + 1;
             } 
         }
-
+        
         // higher the score the better...
         return score;
     }
