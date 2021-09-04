@@ -70,13 +70,13 @@ public class ass1_comp3010 {
         // person from pList who is in most groups
         Person maxP = findMaxActiveGroups(pList);
 
-        // remove person in most groups from pList
+        // remove person in most groups from personList
         pList.remove(maxP);
 
         // add person in most groups to resultList
         resultList.add(maxP);
 
-        // greedy algo, input result list and pList
+        // greedy algo, input result list and personList
         resultList = solver(resultList, pList);
         System.out.println();
 
@@ -151,39 +151,42 @@ public class ass1_comp3010 {
     // this returns a list of people and their groups (an arrayList of People objects)
     public ArrayList<Person> personListHash(ArrayList<ArrayList<Integer>> arrArrList, int numGrps){
 
-        // we use a LinkedHashMap since it preserves ordering... (hashmpa does not preserve ordering) 
+        // we use a LinkedHashMap since it preserves ordering... (hashmap does not preserve ordering) 
         // this hash-map stores the persons ID as a key, and the person object as a value... 
         LinkedHashMap<Integer, Person> contList = new LinkedHashMap<Integer, Person>();
 
-        int group = 1; // we parse this in when we create a new person object
+        // we parse this in when we create a new person object; this iterates per outer loop: (group: arrArrList)
+        int groupID = 1; 
 
-        for (ArrayList<Integer> list : arrArrList){ // iterating through each group
-           
-            for (Integer num : list){ // iterating through each person in a group
+         // iterating through each group, where group is a line that contains a collection of personID's
+        for (ArrayList<Integer> group : arrArrList){
+            
+            // iterating through each person in a group, where each item is a persons ID
+            for (Integer personID : group){ 
                 
                 // checking if person ID exists in contList
-                // since we are using a hashmap -- contains takes O(1)!
-                if (!contList.containsKey(num)){ 
+                // since we are using a hashmap -- contains takes O(1)
+                if (contList.containsKey(personID)){ 
 
-                    // if they don't exist we add them to the contList...
-                    // by creating a person object using num as their ID, numGrps for number of groups
-                    // p.add(group) adds to the persons array of the active groups they are in...
-                    Person p = new Person(num, numGrps);
-                    p.addToList(group);
-                    contList.put(num,p);
-
-                } else { 
-                    
                     // if we come across a person that already exists we log which group we saw them in
                     // use the num (personID) to retrieve person and add the group where we saw them to their active group list
                     // get(id) in a hashmap only takes O(1)
-                    contList.get(num).addToList(group);
+                    contList.get(personID).addToList(groupID);
+
+                } else { 
+                    
+                    // if they don't exist we add them to the contList...
+                    // by creating a person object using num as their ID, numGrps for number of groups
+                    // p.add(group) adds to the persons array of the active groups they are in...
+                    Person p = new Person(personID, numGrps);
+                    p.addToList(groupID);
+                    contList.put(personID,p);
 
                 }
             }
 
             // each time iterate group # since we are moving on to the next group when we reach this point
-            group = group + 1; 
+            groupID = groupID + 1; 
         }
 
         // the list we will return at the end of this method
@@ -254,8 +257,9 @@ public class ass1_comp3010 {
   
     // mList is the list of chosen people
     // pList is the list of all people
-    public ArrayList<Person> solver(ArrayList<Person> mList, ArrayList<Person> pList){
+    public ArrayList<Person> solver(ArrayList<Person> resultList, ArrayList<Person> pList){
         
+        // each iteration we remove an element from pList...
         while (!pList.isEmpty()){
             int maxIdx = 0;
             int maxVal = 0;
@@ -263,44 +267,44 @@ public class ass1_comp3010 {
             // base case 
             // if mList has its num active groups equal to number of groups
             // solution found so we return immmediately
-            if (mList.get(0).activeVsTotal()){
-                return mList;
+            if (resultList.get(0).activeVsTotal()){
+                return resultList;
             }
 
-            for (int i = 0; i < pList.size(); i++){
-            
-                // first loop the max is initially the first item...
-                if (i == 0){ 
-                    maxVal = mList.get(0).sumUnion(pList.get(i).getGroupList());
-                } 
+            // set the maxVal to first item in pList
+            maxVal = resultList.get(0).sumUnion(pList.get(0).getGroupList()); 
+
+            for (int i = 1; i < pList.size(); i++){
                 
-                // cunion between the first item in mList and current person (i) in pList
-                // sumUnion uses a for loop to find the binary OR of the two people
-                int curr = mList.get(0).sumUnion(pList.get(i).getGroupList()); 
-                
-                // if we come across a better score
-                if (curr > maxVal){
-                    maxVal = curr; // new best score is current
-                    maxIdx = i; // new index is i
+                // only check the union if the persons active groups greater than the maxVal
+                if (pList.get(i).getActiveGroups() > maxVal){
+                        // curr is the score of the union between the first item in mList and current person (i) in pList
+                        int curr = resultList.get(0).sumUnion(pList.get(i).getGroupList()); 
+       
+                        // if we come across a better score
+                        if (curr > maxVal){
+                            maxVal = curr; // new best score is current
+                            maxIdx = i; // new index is i
+                        }
+
                 }
-    
+
+               
             }
     
             // get person at the max index
             Person temp = pList.get(maxIdx);
     
             // add and union selected person (temp)
-            mList.add(temp); 
-            mList.get(0).createUnion(temp.getGroupList()); 
+            resultList.add(temp); 
+            resultList.get(0).createUnion(temp.getGroupList()); 
     
             // remove selected p from pList
             pList.remove(temp); 
-    
-            // if made it this far; recursive call
-        
+            
         }
 
-        return mList;
+        return resultList;
 
     }
 

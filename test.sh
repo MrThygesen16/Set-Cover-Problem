@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # for storing what test file & options
-# e.g. specific test case or "-all" or "brief"
+# e.g. specific test case or "-all" or "brief", or wild card (specific test file...)
 var=$1
 
 # case match certain input

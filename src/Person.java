@@ -20,8 +20,7 @@ public class Person {
 
     // when we create a new person object or come across the same person in a different group
     // we also want to keep track of the groups a particular person is in
-    // we do totalGroups - groupID as it gives us exactly the form we want for the binary representation
-    // e.g. group ID = 5, and totalGroups = 6 --> person would need to go to index of 1... which is 6 - 5.
+    // we do groupID-1 as it gives us exactly the form we want for the binary representation
     public void addToList(int groupID){
 
        // int idx = this.totalGroups-groupID; // index for given group ID
@@ -93,9 +92,6 @@ public class Person {
             // gList is other person        this.groups is current persons list (assuming the max person)
             if (otherList[i] == 1 && this.groups[i] == 0){ // if the other person has a 1 current has a 0 this is ideal + 1 to score
                 score = score + 1;
-            // should we even worry about negative scoring?            note: the line commented below improves one test case drastically at the cost of making another slightly worse...
-            } else if ((otherList[i] == 0 && this.groups[i] == 0) ){ //|| (otherList[i] == 1 && this.groups[i] == 1)){ // if both other and current person have 0s -- not ideal... -1 to score
-                score = score - 1; 
             } 
         }
 
